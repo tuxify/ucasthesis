@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-13 16:16
+%% Last modified: 2019-11-14 10:38
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -23,6 +23,7 @@
   setkeys=\kvsetkeys}
 \DeclareStringOption[doctor]{degree}[doctor]
 \DeclareBoolOption{secret}
+\DeclareBoolOption{mkshuji}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
 \newcommand\ucas@validate@key[1]{%
@@ -42,8 +43,7 @@
 \RequirePackage{amsmath}
 \RequirePackage{unicode-math}
 \RequirePackage{graphicx}
-\RequirePackage{courier}%%TODO:
-\RequirePackage[list=off]{bicaption}%%TODO:
+\RequirePackage[list=off]{bicaption}
 \RequirePackage[labelformat=simple]{subcaption}
 \RequirePackage{pdfpages}
 \includepdfset{fitpaper=true}
@@ -91,16 +91,13 @@
   \clearpage{\pagestyle{ucas@empty}\ucas@cleardoublepage}}
 \let\cleardoublepage\ucas@clearemptydoublepage
 \renewcommand\frontmatter{%
-  % \if@openright\cleardoublepage\else\clearpage\fi
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}
-  % \pagestyle{ucas@empty}
   \pagestyle{ucas@frontheadings}
   \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
            chapter/pagestyle={ucas@frontheadings}}}
 \renewcommand\mainmatter{%
-  % \if@openright\cleardoublepage\else\clearpage\fi
   \cleardoublepage
   \@mainmattertrue
   \pagestyle{ucas@headings}
@@ -108,7 +105,6 @@
   \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
            chapter/pagestyle={ucas@headings}}}
 \renewcommand\backmatter{%
-  % \if@openright\cleardoublepage\else\clearpage\fi
   \cleardoublepage
   \@mainmattertrue
   \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
@@ -197,7 +193,7 @@
   \xeCJKsetwidth{‘’“”}{1em}
 }{}
 \renewcommand\normalsize{%
-  \@setfontsize\normalsize{12bp}{23.4bp}%
+  \@setfontsize\normalsize{12bp}{23.4bp}%根据Word微调
   \abovedisplayskip=12bp \@plus 2bp \@minus 2bp
   \abovedisplayshortskip=12bp \@plus 1bp \@minus 1bp
   \belowdisplayskip=12bp \@plus 2bp \@minus 2bp
@@ -225,7 +221,7 @@
 \ucas@def@fontsize{bahao}{5bp}
 \ctexset{
   chapter/name   = {第,章},
-  appendixname   = 附录,
+  appendixname   = {附录},%TODO:页眉显示"附\hspace{\ccwd}录"
   contentsname   = {目\hspace{\ccwd}录},
   listfigurename = 插图目录,
   listtablename  = 表格目录,
@@ -233,8 +229,11 @@
   tablename      = 表,
   bibname        = 参考文献,
 }
+\newcommand\ucas@cfigurename{图}
+\newcommand\ucas@efigurename{Figure}
+\newcommand\ucas@ctablename{表}
+\newcommand\ucas@etablename{Table}
 \newcommand\ucas@denotation@name{主要符号对照表}
-\newcommand\equationname{公式}
 \newcommand\ucas@assumption@name{假设}
 \newcommand\ucas@definition@name{定义}
 \newcommand\ucas@proposition@name{命题}
@@ -263,26 +262,25 @@
   \renewcommand{\footrulewidth}{0pt}}
 \fancypagestyle{ucas@headings}{%
   \fancyhead{}
-  \fancyhead[CO]{\wuhao\normalfont\leftmark}
-  \fancyhead[CE]{\wuhao\normalfont\ucas@ctitlemark}
+  \fancyhead[CO]{\xiaowu\leftmark}
+  \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
   \fancyfoot{}
-  % \fancyfoot[C]{\wuhao\thepage}
   \fancyfoot[RO]{\xiaowu\thepage}
   \fancyfoot[LE]{\xiaowu\thepage}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\footrulewidth}{0pt}}
 \fancypagestyle{ucas@frontheadings}{%
   \fancyhead{}
-  \fancyhead[CO]{\wuhao\normalfont\leftmark}
-  \fancyhead[CE]{\wuhao\normalfont\ucas@ctitlemark}
+  \fancyhead[CO]{\xiaowu\leftmark}
+  \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
   \fancyfoot{}
   \fancyfoot[C]{\xiaowu\thepage}
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\footrulewidth}{0pt}}
 \fancypagestyle{ucas@eabstractheadings}{%
   \fancyhead{}
-  \fancyhead[CO]{\wuhao\songti\leftmark}
-  \fancyhead[CE]{\wuhao\songti\ucas@etitlemark}
+  \fancyhead[CO]{\xiaowu\leftmark}
+  \fancyhead[CE]{\xiaowu\ucas@etitlemark}
   \fancyfoot{}
   \fancyfoot[C]{\xiaowu\thepage}
   \renewcommand{\headrulewidth}{0.4pt}
@@ -380,19 +378,9 @@
 \renewcommand{\floatpagefraction}{0.60}
 \let\old@tabular\@tabular
 \def\ucas@tabular{\wuhao[1.5]\old@tabular}
-\DeclareCaptionLabelFormat{ucas}{{\wuhao[1.5]\bfseries #1~\rmfamily #2}}%songti
+\DeclareCaptionLabelFormat{ucas}{{\bfseries #1~#2}}
 \DeclareCaptionLabelSeparator{ucas}{\hspace{\ccwd}}
-\DeclareCaptionFont{ucas}{\wuhao[1.5]}
-\DeclareCaptionFormat{ucas}{{\centering #1#2#3}\par}
-% \captionsetup{labelformat=ucas,labelsep=ucas,font=ucas,format=hang}
-\captionsetup{labelformat=ucas,labelsep=ucas,font=ucas,format=ucas}
-% \captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=6bp}
-% \captionsetup[figure]{position=bottom,belowskip={12bp-\intextsep},aboveskip=6bp}
-\captionsetup[table]{position=top,belowskip={12bp-\intextsep},aboveskip=6bp}
-\captionsetup[figure]{position=bottom,belowskip={12bp-\intextsep},aboveskip=6bp}
-\captionsetup[sub]{font=ucas,skip=6bp}
-\renewcommand{\thesubfigure}{(\alph{subfigure})}
-\renewcommand{\thesubtable}{(\alph{subtable})}
+\DeclareCaptionFormat{ucas}{{\wuhao[1.5]\centering #1#2#3}\par}
 \DeclareCaptionOption{bi-first}[]{%
     \def\tablename{\ucas@ctablename}
     \def\figurename{\ucas@cfigurename}
@@ -401,9 +389,14 @@
     \def\tablename{\ucas@etablename}
     \def\figurename{\ucas@efigurename}
 }%bi-second
+\captionsetup{labelformat=ucas,labelsep=ucas,format=ucas}
+\captionsetup[table]{position=top,belowskip=6bp,aboveskip=6bp}
+\captionsetup[figure]{position=bottom,belowskip=12bp,aboveskip=6bp}
 \captionsetup{bi-slc=off}
 \captionsetup[bi-first]{bi-first}
 \captionsetup[bi-second]{bi-second}
+\renewcommand{\thesubfigure}{(\alph{subfigure})}
+\renewcommand{\thesubtable}{(\alph{subtable})}
 \let\ucas@LT@array\LT@array
 \def\LT@array{\wuhao[1.5]\ucas@LT@array} % set default font size
 \def\hlinewd#1{%
@@ -507,7 +500,7 @@
       \advance\leftskip\@tempdima
       \hskip -\leftskip
       % numberline is called here, and it uses \@tempdima
-      {\csname ucas@toc@font\endcsname\heiti #1}
+      {\csname ucas@toc@font\endcsname\sffamily #1}
       \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfill
       \nobreak{\normalfont\normalcolor #2}\par
       \penalty\@highpenalty
@@ -541,10 +534,6 @@
 \ucas@def@term{cdegree}
 \ucas@def@term{edegree}
 \ucas@def@term{cdepartment}
-\ucas@def@term{cfigurename}
-\ucas@def@term{efigurename}
-\ucas@def@term{ctablename}
-\ucas@def@term{etablename}
 \ucas@def@term{edepartment}
 \ucas@def@term{cmajor}
 \ucas@def@term{emajor}
@@ -612,22 +601,20 @@
   \begin{center}
     \vspace*{-2cm}
     \parbox[t][1cm][t]{\textwidth}{%
-      \ifucas@secret\hfill{\sihao[1]\songti
+      \ifucas@secret\hfill{\sihao[1]\normalfont
         \textbf{\ucas@secretlevel\ucas@title@sep}
         \underline{\makebox[6em]{\ucas@secret@content}}}\fi}
-    \begin{figure}[H]
-      \centering
-      % \includegraphics[width=128mm,height=21.7mm]{UCAS}
+    \begin{center}
       \includegraphics[height=21.59mm]{UCAS}
-    \end{figure}
+    \end{center}
     \parbox[t][6cm][t]{\paperwidth-8cm}{
       \renewcommand{\baselinestretch}{1.5}
       \begin{center}
-        \yihao\heiti\ucas@apply
+        \yihao\sffamily\ucas@apply
         \par\vskip 50bp
-        \xiaosan\heiti \CJKunderline{\ucas@ctitle}
+        \xiaosan\sffamily \CJKunderline{\ucas@ctitle}
       \end{center}}
-    \parbox[t][10cm][t]{\textwidth}{\sihao\bfseries%\songti
+    \parbox[t][10cm][t]{\textwidth}{\sihao\bfseries
       \begin{center}
         \setlength{\ucas@title@width}{4em}
         \setlength{\extrarowheight}{2.5ex}
@@ -647,7 +634,7 @@
         \end{tabular}
       \end{center}}
     \begin{center}
-      {\vfill \sihao\bfseries\ucas@cdate}%\songti
+      {\vfill \sihao\bfseries\ucas@cdate}
     \end{center}
   \end{center}} % end of titlepage
 \newcommand{\ucas@engcover}{%
@@ -680,9 +667,6 @@
             & \textbf{\ucas@esupervisor} \\
             & \textbf{\ucas@ecosupervisor} \\
         \end{tabular}
-        % \sihao\rmfamily \textbf{Supervisor: }
-        % \textbf{\ucas@esupervisor}\\
-        % \hspace*{11em}\textbf{\ucas@ecosupervisor}\\
       \end{center}}
     \parbox[t][3.6cm][b]{\textwidth}{
     \renewcommand{\baselinestretch}{1.5}
@@ -696,7 +680,7 @@
   \thispagestyle{ucas@empty}
   \vspace*{0.42cm}
   \begin{center}
-      \sihao[2.0]\heiti
+      \sihao[2.0]\sffamily
       \ucas@schoolname\\
       \ucas@declarename
   \end{center}
@@ -709,7 +693,7 @@
   \endgroup
   \vskip2.0cm
   \begin{center}
-      \sihao[2.0]\heiti
+      \sihao[2.0]\sffamily
       \ucas@schoolname\\
       \ucas@authtitle
   \end{center}
@@ -741,6 +725,7 @@
     \ucas@engcover
     \cleardoublepage
     \ucas@authorization@mk
+    \ifucas@mkshuji\ucas@shuji\fi
   \end{titlepage}
   \normalsize
   \ucas@makeabstract
@@ -758,7 +743,7 @@
   \pagenumbering{Roman}
   \ucas@cabstract
   \vskip12bp
-  \ucas@put@keywords{\bfseries\ucas@ckeywords@title}{\ucas@ckeywords}%\heiti
+  \ucas@put@keywords{\bfseries\ucas@ckeywords@title}{\ucas@ckeywords}
   \cleardoublepage
   \ucas@chapter*[]{\eabstractname} % no tocline
   \ucas@eabstract
@@ -867,9 +852,9 @@
   \cleardoublepage
   \ucas@chapter*{#1}}{}
 \newcommand{\resumeitem}[1]{%
-  \vspace{24bp}{\xiaosi\heiti\flushleft{#1}}\par\vspace{6bp}}
+  \vspace{24bp}{\xiaosi\sffamily\flushleft{#1}}\par\vspace{6bp}}
 \newcommand{\researchitem}[1]{%
-  \vspace{32bp}{\xiaosi\heiti\flushleft{#1}}\par\vspace{14bp}}
+  \vspace{32bp}{\xiaosi\sffamily\flushleft{#1}}\par\vspace{14bp}}
 \newlist{publications}{enumerate}{1}
 \setlist[publications]{label=[\arabic*],align=left,nosep,itemsep=8bp,
   leftmargin=10mm,labelsep=!,before=\xiaosi[1.26],resume}
@@ -883,6 +868,19 @@
   \def\thenomenclature{\begin{denotation}[\nom@tempdim]}
   \def\endthenomenclature{\end{denotation}}
 }
+\ifucas@mkshuji
+  \newCJKfontfamily[notosf]\notosf{Noto Sans CJK SC}
+  \NewDocumentCommand{\ucas@shuji}%
+    {O{\ucas@ctitle} O{\ucas@cauthor} O{\ucas@schoolname}}{%
+    \newpage\thispagestyle{empty}{%
+      \notosf\addCJKfontfeatures*{RawFeature={vertical:}}%
+      \xiaosi\ziju{0.2}%
+      \noindent\hfill\rotatebox[origin=lt]{-90}{%
+        \makebox[\textheight]{%
+          \hspace*{.5cm}#1\hfill#2\hfill#3\hspace*{.5cm}}
+      }\hfill}
+  }
+\fi
 \AtEndOfClass{\sloppy}
 \endinput
 %%

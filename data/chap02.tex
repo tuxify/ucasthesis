@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2019-11-10 10:32
-%% Last modified: 2019-11-13 16:15
+%% Last modified: 2019-11-14 10:31
 %%================================================
 \chapter{模板使用示例 Some Examples}
 \label{cha:examples}
@@ -21,7 +21,8 @@
 \begin{figure}[htbp]
 \centering
 \includegraphics[width = 0.3\textwidth]{golfer}
-\caption{打高尔夫球的人}
+\bicaption{打高尔夫球的人}
+          {Golfer}
 \label{fig:golfer}
 \end{figure}
 
@@ -37,7 +38,7 @@
 \includegraphics[width=0.3\textwidth]{qingming}
 \hspace{36pt}
 \includegraphics[width=0.3\textwidth]{fanfu}
-\caption{反清复明}
+\bicaption{反清复明}{Fan Qing Fu Ming}
 \label{fig:fanqingfuming}
 \end{figure}
 
@@ -52,54 +53,47 @@
 \begin{minipage}[t]{0.3\textwidth}
     \centering
     \includegraphics[width=\textwidth]{qingming}
-    \caption{清明}
+    \bicaption{清明}{Qing Ming}
     \label{fig:qingming}
 \end{minipage}
 \hspace{36pt}
 \begin{minipage}[t]{0.3\textwidth}
     \centering
     \includegraphics[width=\textwidth]{fanfu}
-    \caption{反复}
+    \bicaption{反复}{Fan Fu}
     \label{fig:fanfu}
 \end{minipage}
 \end{figure}
 
 \subsubsection*{并排摆放，共享标题，各有子标题}
 
-如果想要两幅并排的图片共享一个标题，并各有自己的子标题，可以使用
-\textbf{subcaption} 宏包提供的 \texttt{subcaptionbox} 命令，如图~\ref{fig:subfig_a}~和~\ref{fig:subfig_b}~所示。
-
-每个子图可以有各自的引用，就象这个样子：\ref{fig:subfig_a}、
-\ref{fig:subfig_b}。
+如果想要两幅并排的图片共享一个标题，并各有自己的子标题，可以使用 \textbf{subcaption} 宏包提供的 \texttt{subcaptionbox} 命令，每个子图可以有各自的引用，如图~\ref{fig:subfig_a}~和~\ref{fig:subfig_b}~所示。
 
 \begin{figure}[htbp]
 \centering
-\subcaptionbox{清明\label{fig:subfig_a}}[0.3\textwidth]{
+\bisubcaptionbox{清明\label{fig:subfig_a}}{Qing Ming}[0.3\textwidth]{
     \includegraphics[width=0.3\textwidth]{qingming}
 }
 \hspace{36pt}
-\subcaptionbox{反复\label{fig:subfig_b}}[0.3\textwidth]{
+\bisubcaptionbox{反复\label{fig:subfig_b}}{Fan Fu}[0.3\textwidth]{
     \includegraphics[width=0.3\textwidth]{fanfu}
 }
-\caption{反清复明}
+\bicaption{反清复明}{Fan Qing Fu Ming}
 \end{figure}
 
 \section{表格示例}
 \label{sec:table}
-
-模板中关于表格的宏包有四个：\textbf{tabularx}、\textbf{multirow}、
-\textbf{longtable} 和\textbf{booktabs}。长表格还可以用\textbf{supertabular}，
-可以方便地在表格下方加入脚注。
 
 \subsection{普通表格的绘制方法}
 
 \texttt{table} 环境是一个将表格嵌入文本的浮动环境，其标题和交叉引用的用法类似
 于上一节提到的图形浮动环境 \texttt{figure}，该环境提供了最简单的表格功能。
 
-科技文献中常使用三线表格，因此需要调用 \textbf{booktabs} 宏包，其标准格式如表~\ref{tab:booktabs}~所示。
+科技文献中常使用三线表格，因此需要调用 \textbf{booktabs} 宏包，其标准格式如表~\ref{tab:booktabs}~所示。除了用该宏包所提供的命令外，模板还定义了命令 \verb|\hlinewd|，可以用于简单表格。
 
 \begin{table}[htbp]
-\caption{文献类型和标识代码}
+\bicaption{文献类型和标识代码}
+          {Bibliography and Identification Code}
 \label{tab:booktabs}
 \centering
 \begin{tabular}{cccc}
@@ -118,20 +112,20 @@
 
 \subsection{长表格的绘制方法}
 
-长表格是当表格在当前页排不下而需要转页接排的情况下所采用的一种表格环境。若长
-表格仍按照普通表格的绘制方法来获得，其所使用的 \texttt{table} 浮动环境无法实现
-表格的换页接排功能，表格下方过长部分会排在表格第1页的页脚以下。
+长表格是当表格在当前页排不下而需要转页接排的情况下所采用的一种表格环境，\textbf{longtable} 宏包提供了排版长表格所需的功能。长表格还可以用\textbf{supertabular}，可以方便地在表格下方加入脚注。
 
 \begin{longtable}{l@{\hspace{6.5mm}}l@{\hspace{5.5mm}}l}
-\multicolumn{3}{c}{续表~\thetable\hskip1em 中国省级行政单位一览}\\
+\multicolumn{3}{l}{续表~\thetable\hskip1em 中国省级行政单位一览}\\
+% \multicolumn{3}{l}{Continued to Table~\thetable\hskip1em Provinces in China}\\
 \toprule 名称 & 简称 & 省会或首府  \\ \midrule
 \endhead
-\caption{中国省级行政单位一览}
+\bicaption{中国省级行政单位一览}{Provinces in China}
 \label{tab:longtable}\\
 \toprule 名称 & 简称 & 省会或首府  \\ \midrule
 \endfirsthead
 \bottomrule
 \multicolumn{3}{r}{续下页}\\
+% \multicolumn{3}{r}{To be continued}\\
 \endfoot
 \bottomrule
 \endlastfoot
@@ -179,15 +173,15 @@
 
 论文中能用到列宽可调表格的情况共有两种，一种是当插入的表格某一单元格内容过长
 以至于一行放不下的情况，另一种是当对公式中首次出现的物理量符号进行注释的情况
-，这两种情况都需要调用 \textbf{tabularx} 宏包。下面将分别对这两种情况下可调表格的绘制
-方法进行阐述。
+，这两种情况都需要调用 \textbf{tabularx} 宏包。
 
 \subsubsection{表格内某单元格内容过长的情况}
 
 首先给出这种情况下的一个例子如表~\ref{tab:tabularx}~所示。
 
 \begin{table}[htbp]
-\caption{最小的三个正整数的英文表示法}
+\bicaption{正整数的英文表示法}
+          {English Representation of Positive Integers}
 \label{tab:tabularx}
 \begin{tabularx}{\textwidth}{llX}
 \toprule
@@ -365,5 +359,3 @@ Java是一种跨平台的编程语言。
 \label{sec:ref}
 
 模板应当给出几个参考文献，否则 \texttt{main.tex} 中设置参考文件风格的两行代码在编译时会出错。\cite{chen2001,ding2001}
-
-
