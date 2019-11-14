@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 14:40
+%% Last modified: 2019-11-14 22:10
 %%================================================
 \documentclass[degree=doctor]{ucasthesis}
 % \documentclass[degree=doctor]{ucasthesis}
@@ -34,6 +34,11 @@
 \listoffigures* % 星号表示不在目录中显示图表目录
 \listoftables*
 
+%% 符号对照表
+% 规范未限定放置顺序，但研究生部要求放文后
+% 鉴于各研究院所要求不同，可以试着放前面，页眉页脚会自动调整
+% \input{data/denotation}
+
 %%% 正文部分
 \mainmatter
 \include{data/chap01}
@@ -49,10 +54,10 @@
 \bibliography{ref/refs}
 
 %% 附录
-% \begin{appendix}
-%   \input{data/app01}
-%   \input{data/app02}
-% \end{appendix}
+\begin{appendix}
+  \input{data/app01}
+  \input{data/app02}
+\end{appendix}
 
 %% 符号对照表
 \input{data/denotation}

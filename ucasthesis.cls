@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 16:29
+%% Last modified: 2019-11-14 22:06
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -48,6 +48,7 @@
 \RequirePackage{pdfpages}
 \includepdfset{fitpaper=true}
 \RequirePackage[shortlabels]{enumitem}
+\RequirePackage{titletoc}
 \RequirePackage{environ}
 \RequirePackage[perpage,hang]{footmisc}
 \RequirePackage{CJKfntef}
@@ -468,35 +469,34 @@
 \renewcommand\tableofcontents{%
   \cleardoublepage
   \ucas@chapter*[]{\contentsname}
-  \xiaosi[1.65]\@starttoc{toc}\normalsize}
-\def\@pnumwidth{2em}
-\def\@tocrmarg{\@pnumwidth}
-\def\@dotsep{1}
-\renewcommand*\l@chapter[2]{%
-  \ifnum \c@tocdepth >\m@ne
-    \addpenalty{-\@highpenalty}%
-    \vskip 6bp \@plus\p@
-    \setlength\@tempdima{1em}%
-    \begingroup
-      \parindent \z@ \rightskip \@pnumwidth
-      \parfillskip -\@pnumwidth
-      \leavevmode
-      \advance\leftskip\@tempdima
-      \hskip -\leftskip
-      % numberline is called here, and it uses \@tempdima
-      {\csname ucas@toc@font\endcsname\sffamily #1}
-      \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfill
-      \nobreak{\normalfont\normalcolor #2}\par
-      \penalty\@highpenalty
-    \endgroup
-  \fi}
-\patchcmd{\@dottedtocline}{\hb@xt@\@pnumwidth}{\hbox}{}{}
-\renewcommand*\l@section{%
-  \@dottedtocline{1}{\ccwd}{2.1em}}
-\renewcommand*\l@subsection{%
-  \@dottedtocline{2}{2\ccwd}{3em}}
-\renewcommand*\l@subsubsection{%
-  \@dottedtocline{3}{3.5em}{3.8em}}
+  \@starttoc{toc}\normalsize}
+\renewcommand\listoffigures{%
+  \cleardoublepage
+  \@ifstar
+  {\ucas@chapter*[]{\listfigurename}
+  \@starttoc{lof}\normalsize}
+  {\ucas@chapter*{\listfigurename}\@starttoc{lof}}}
+\renewcommand\listoftables{%
+  \cleardoublepage
+  \@ifstar
+  {\ucas@chapter*[]{\listtablename}
+  \@starttoc{lot}\normalsize}
+  {\ucas@chapter*{\listtablename}\@starttoc{lot}}}
+\titlecontents{chapter}[\z@]{\vspace{6bp}\sffamily\sihao[1.25]}
+  {{\thecontentslabel}\quad}{}
+  {\hspace{.5em}\titlerule*{.}\rmfamily\sihao[1.25]\contentspage}
+\titlecontents{section}[\ccwd]{\vspace{6bp}\sffamily\xiaosi[1.25]}
+  {\thecontentslabel\quad}{}
+  {\hspace{.5em}\titlerule*{.}\rmfamily\xiaosi[1.25]\contentspage}
+\titlecontents{subsection}[2\ccwd]{\vspace{6bp}\sffamily\xiaosi[1.25]}
+  {\thecontentslabel\quad}{}
+  {\hspace{.5em}\titlerule*{.}\rmfamily\xiaosi[1.25]\contentspage}
+\titlecontents{figure}[\z@]{\vspace{6bp}\sffamily\xiaosi[1.25]}
+  {\makebox[3.5em][l]{\figurename~\thecontentslabel\quad}}{}
+  {\hspace{.5em}\titlerule*{.}\rmfamily\xiaosi[1.25]\contentspage}
+\titlecontents{table}[\z@]{\vspace{6bp}\sffamily\xiaosi[1.25]}
+  {\makebox[3.5em][l]{\tablename~\thecontentslabel\quad}}{}
+  {\hspace{.5em}\titlerule*{.}\rmfamily\xiaosi[1.25]\contentspage}
 \def\ucas@def@term#1{%
   \define@key{ucas}{#1}{\csname #1\endcsname{##1}}
   \expandafter\gdef\csname #1\endcsname##1{%
@@ -736,7 +736,7 @@
 \newenvironment{denotation}[1][2.5cm]{%
   \cleardoublepage
   \ucas@chapter*[1]{\ucas@denotation@name} % with tocline
-  \vskip-30bp\xiaosi[1.6]\begin{ucas@denotation}[labelwidth=#1]
+  \vskip-30bp\begin{ucas@denotation}[labelwidth=#1]
 }{\end{ucas@denotation}}
 \newlist{ucas@denotation}{description}{1}
 \setlist[ucas@denotation]{%
@@ -755,20 +755,6 @@
   }{\vskip 48bp\hfill\ucas@ackdate}
 \let\ack\acknowledgement
 \let\endack\endacknowledgement
-\def\ucas@starttoc#1{% #1: float type, prepend type name in \listof*** entry.
-  \let\oldnumberline\numberline
-  \def\numberline##1{\oldnumberline{\csname #1name\endcsname\hskip.4em ##1}}
-  \@starttoc{\csname ext@#1\endcsname}
-  \let\numberline\oldnumberline}
-\def\ucas@listof#1{% #1: float type
-  \cleardoublepage
-  \@ifstar
-    {\ucas@chapter*[]{\csname list#1name\endcsname}\ucas@starttoc{#1}}
-    {\ucas@chapter*{\csname list#1name\endcsname}\ucas@starttoc{#1}}}
-\renewcommand\listoffigures{\ucas@listof{figure}}
-\renewcommand*\l@figure{\addvspace{6bp}\@dottedtocline{1}{0em}{4em}}
-\renewcommand\listoftables{\ucas@listof{table}}
-\let\l@table\l@figure
 \newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
 \DeclareRobustCommand\inlinecite{\@inlinecite}
 \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
@@ -820,18 +806,8 @@
 \let\ucas@appendix\appendix
 \renewenvironment{appendix}{%
   \cleardoublepage
-  \let\title\ucas@appendix@title
-  \ucas@appendix}{%
-  \let\title\@gobble}
-\let\title\@gobble
-\newcommand{\ucas@appendix@title}[1]{%
-  \begin{center}
-    \xiaosi[1.667] #1
-  \end{center}}
-\newcommand{\appendixmark}[1]{\@mkboth{#1}{}}
-\newlist{translationbib}{enumerate}{1}
-\setlist[translationbib]{label=[\arabic*],align=left,nosep,itemsep=6bp,
-  leftmargin=10mm,labelsep=!,before=\vspace{0.5\baselineskip}\wuhao[1.3]}
+  \ucas@appendix}{}
+\newcommand{\setleftmark}[1]{\@mkboth{#1}{}}
 \newenvironment{resume}[1][\ucas@resume@title]{%
   \cleardoublepage
   \ucas@chapter*{#1}}{}
