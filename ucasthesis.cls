@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 14:42
+%% Last modified: 2019-11-14 16:16
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -244,7 +244,7 @@
 \newcommand\ucas@proof@name{证明}
 \newcommand\ucas@theorem@separator{：}
 \newcommand\ucas@ack@name{致\hspace{\ccwd}谢}
-\newcommand\ucas@resume@title{作者简介及在学期间发表的学术论文与研究成果}
+\newcommand\ucas@resume@title{作者简历及攻读学位期间发表的学术论文与研究成果}
 \fancypagestyle{ucas@empty}{%
   \fancyhf{}
   \renewcommand{\headrulewidth}{0pt}
@@ -405,8 +405,6 @@
 \AtBeginDocument{%
   \pagestyle{ucas@empty}
   \renewcommand{\chaptermark}[1]{\@mkboth{\CTEXthechapter\hskip\ccwd#1}{}}}
-\newcommand\ucas@chapter@titleformat[1]{%
-  \ifthenelse{\equal{#1}{\eabstractname}}{\bfseries #1}{#1}}
 \ctexset{%
   chapter={
     afterindent=true,
@@ -414,28 +412,28 @@
     beforeskip={9bp},
     aftername=\hskip\ccwd,
     afterskip={18bp},
-    format={\centering\sffamily\sihao[1.5]},
+    format={\centering\bfseries\sffamily\sihao},
     nameformat=\relax,
     numberformat=\relax,
-    titleformat=\ucas@chapter@titleformat,
+    titleformat=\relax,
   },
   section={
     afterindent=true,
     beforeskip={24bp\@plus 1ex \@minus .2ex},
     afterskip={6bp\@plus .2ex},
-    format={\sffamily\xiaosi[1.429]},
+    format={\sffamily\xiaosi},
   },
   subsection={
     afterindent=true,
     beforeskip={12bp\@plus 1ex \@minus .2ex},
     afterskip={6bp \@plus .2ex},
-    format={\sffamily\xiaosi[1.538]},
+    format={\sffamily\xiaosi},
   },
   subsubsection={
     afterindent=true,
-    beforeskip={16bp\@plus 1ex \@minus .2ex},
+    beforeskip={12bp\@plus 1ex \@minus .2ex},
     afterskip={6bp \@plus .2ex},
-    format={\sffamily\xiaosi[1.667]},
+    format={\sffamily\xiaosi},
   },
   paragraph/afterindent=true,
   subparagraph/afterindent=true}
@@ -587,18 +585,18 @@
   \begin{center}
     \vspace*{-2cm}
     \parbox[t][1cm][t]{\textwidth}{%
-      \ifucas@secret\hfill{\sihao[1]\normalfont
+      \ifucas@secret\hfill{\sanhao[1]\sffamily
         \textbf{\ucas@secretlevel\ucas@title@sep}
         \underline{\makebox[6em]{\ucas@secret@content}}}\fi}
     \begin{center}
       \includegraphics[height=21.59mm]{UCAS}
     \end{center}
-    \parbox[t][6cm][t]{\paperwidth-8cm}{
+    \parbox[t][6cm][t]{\paperwidth-8cm}{\sffamily\bfseries
       \renewcommand{\baselinestretch}{1.5}
       \begin{center}
-        \yihao\sffamily\ucas@apply
+        \yihao\ucas@apply
         \par\vskip 50bp
-        \xiaosan\sffamily \CJKunderline{\ucas@ctitle}
+        \xiaosan\CJKunderline{\ucas@ctitle}
       \end{center}}
     \parbox[t][10cm][t]{\textwidth}{\sihao\bfseries
       \begin{center}
@@ -607,7 +605,7 @@
         \begin{tabular}{ll}
           \ucas@author@title\ucas@title@sep     
             & \underline{\makebox[25em]{\ucas@cauthor}}\\
-          \ucas@supervisor@title\ucas@title@sep
+          \ucas@supervisor@title\ucas@title@sep%TODO:判断是否存在辅助导师，单位
             & \underline{\makebox[25em]{\ucas@csupervisor}}\\
             & \underline{\makebox[25em]{\ucas@ccosupervisor}}\\
             & \underline{\makebox[25em]{\ucas@csupervisorplace}}\\
@@ -628,45 +626,44 @@
   \thispagestyle{ucas@empty}
   \begin{center}
     \vspace*{1cm}
-    \parbox[t][3.6cm][t]{\textwidth}{
-      \renewcommand{\baselinestretch}{1.5}
+    \renewcommand{\baselinestretch}{1.5}
+    \parbox[t][4.8cm][t]{\textwidth}{\xiaosan\bfseries
       \begin{center}
-          \xiaosan\rmfamily\textbf{\uline{\ucas@etitle}}
+          \uline{\ucas@etitle}
       \end{center}}
-    \parbox[t][10.8cm][c]{\textwidth}{
-      \renewcommand{\baselinestretch}{1.5}
+    \vspace{24bp}
+    \parbox[t][10.8cm][c]{\textwidth}{\sihao\bfseries
       \begin{center}
-        \sihao
-        \rmfamily \textbf{A \ifucas@master Thesis \else Dissertation \fi
+        {A \ifucas@master Thesis \else Dissertation \fi
         Submitted to}\\
-        \rmfamily \textbf{University of Chinese Academy of Sciences} \\
-        \rmfamily \textbf{in partial fulfillment of the requirement}\\
-        \rmfamily \textbf{for the degree of}\\
-        \rmfamily \textbf{\ucas@edegree}\\
-        \rmfamily \textbf{in} \textbf{\ucas@emajor}\\
+        {University of Chinese Academy of Sciences} \\
+        {in partial fulfillment of the requirement}\\
+        {for the degree of}\\
+        {\ucas@edegree}\\
+        {\sanhao{in}} {\ucas@emajor}\\
         \par\vskip 12bp
-        \sihao\rmfamily \textbf{By}\\% sihao or sanhao?
-        \sihao\rmfamily \textbf{\ucas@eauthor}\\
+        {\sanhao{By}}\\
+        {\ucas@eauthor}\\
         \par\vskip 20bp
         \begin{tabular}{ll}
-          \sihao\rmfamily \textbf{Supervisor: }
-            & \textbf{\ucas@esupervisor} \\
-            & \textbf{\ucas@ecosupervisor} \\
+          {Supervisor: }
+            & {\ucas@esupervisor} \\
+            & {\ucas@ecosupervisor} \\
         \end{tabular}
       \end{center}}
-    \parbox[t][3.6cm][b]{\textwidth}{
-    \renewcommand{\baselinestretch}{1.5}
+    \vspace{12bp}
+    \parbox[t][3.6cm][b]{\textwidth}{\sihao\bfseries
     \begin{center}
-      \sihao\rmfamily\textbf{\ucas@edepartment}
+      {\ucas@edepartment}
       \par\vskip 12bp
-      \sihao\rmfamily\textbf{\ucas@edate}
+      {\ucas@edate}
     \end{center}}
   \end{center}}
 \newcommand{\ucas@authorization@mk}{%
   \thispagestyle{ucas@empty}
   \vspace*{0.42cm}
   \begin{center}
-      \sihao[2.0]\sffamily
+      \sihao[2.0]\sffamily\bfseries
       \ucas@schoolname\\
       \ucas@declarename
   \end{center}
@@ -679,7 +676,7 @@
   \endgroup
   \vskip2.0cm
   \begin{center}
-      \sihao[2.0]\sffamily
+      \sihao[2.0]\sffamily\bfseries
       \ucas@schoolname\\
       \ucas@authtitle
   \end{center}
@@ -839,9 +836,9 @@
   \cleardoublepage
   \ucas@chapter*{#1}}{}
 \newcommand{\resumeitem}[1]{%
-  \vspace{24bp}{\xiaosi\sffamily\flushleft{#1}}\par\vspace{6bp}}
+  \vspace{24bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{6bp}}
 \newcommand{\researchitem}[1]{%
-  \vspace{32bp}{\xiaosi\sffamily\flushleft{#1}}\par\vspace{14bp}}
+  \vspace{32bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{14bp}}
 \newlist{publications}{enumerate}{1}
 \setlist[publications]{label=[\arabic*],align=left,nosep,itemsep=8bp,
   leftmargin=10mm,labelsep=!,before=\xiaosi[1.26],resume}
@@ -859,9 +856,9 @@
   \newCJKfontfamily[notosf]\notosf{Noto Sans CJK SC}
   \NewDocumentCommand{\ucas@shuji}%
     {O{\ucas@ctitle} O{\ucas@cauthor} O{\ucas@schoolname}}{%
-    \newpage\thispagestyle{empty}{%
+    \cleardoublepage\thispagestyle{empty}{%
       \notosf\addCJKfontfeatures*{RawFeature={vertical:}}%
-      \xiaosi\ziju{0.2}%
+      \xiaosi\bfseries\ziju{0.2}%
       \noindent\hfill\rotatebox[origin=lt]{-90}{%
         \makebox[\textheight]{%
           \hspace*{.5cm}#1\hfill#2\hfill#3\hspace*{.5cm}}
