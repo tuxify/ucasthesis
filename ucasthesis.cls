@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 16:16
+%% Last modified: 2019-11-14 16:29
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -821,14 +821,14 @@
 \renewenvironment{appendix}{%
   \cleardoublepage
   \let\title\ucas@appendix@title
-  \ucas@appendix
-  }{%TODO:页眉显示“附  录”，非严格要求
+  \ucas@appendix}{%
   \let\title\@gobble}
 \let\title\@gobble
 \newcommand{\ucas@appendix@title}[1]{%
   \begin{center}
     \xiaosi[1.667] #1
   \end{center}}
+\newcommand{\appendixmark}[1]{\@mkboth{#1}{}}
 \newlist{translationbib}{enumerate}{1}
 \setlist[translationbib]{label=[\arabic*],align=left,nosep,itemsep=6bp,
   leftmargin=10mm,labelsep=!,before=\vspace{0.5\baselineskip}\wuhao[1.3]}
