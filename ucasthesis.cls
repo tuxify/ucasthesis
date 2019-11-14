@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 10:38
+%% Last modified: 2019-11-14 14:42
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -94,21 +94,15 @@
   \cleardoublepage
   \@mainmatterfalse
   \pagenumbering{Roman}
-  \pagestyle{ucas@frontheadings}
-  \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
-           chapter/pagestyle={ucas@frontheadings}}}
+  \pagestyle{ucas@headings}}
 \renewcommand\mainmatter{%
   \cleardoublepage
   \@mainmattertrue
-  \pagestyle{ucas@headings}
   \pagenumbering{arabic}
-  \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
-           chapter/pagestyle={ucas@headings}}}
+  \pagestyle{ucas@headings}}
 \renewcommand\backmatter{%
   \cleardoublepage
-  \@mainmattertrue
-  \ctexset{chapter/format={\centering\sffamily\sihao[1.5]},
-           chapter/pagestyle={ucas@headings}}}
+  \@mainmattertrue}
 \newcommand\ucas@fontset{\csname g__ctex_fontset_tl\endcsname}
 \ifthenelse{\equal{\ucas@fontset}{fandol}}{
   \setmainfont[
@@ -221,7 +215,7 @@
 \ucas@def@fontsize{bahao}{5bp}
 \ctexset{
   chapter/name   = {第,章},
-  appendixname   = {附录},%TODO:页眉显示"附\hspace{\ccwd}录"
+  appendixname   = {附录},
   contentsname   = {目\hspace{\ccwd}录},
   listfigurename = 插图目录,
   listtablename  = 表格目录,
@@ -233,6 +227,7 @@
 \newcommand\ucas@efigurename{Figure}
 \newcommand\ucas@ctablename{表}
 \newcommand\ucas@etablename{Table}
+\newcommand\ucas@cappendix{附\hspace{\ccwd}录}
 \newcommand\ucas@denotation@name{主要符号对照表}
 \newcommand\ucas@assumption@name{假设}
 \newcommand\ucas@definition@name{定义}
@@ -263,26 +258,17 @@
 \fancypagestyle{ucas@headings}{%
   \fancyhead{}
   \fancyhead[CO]{\xiaowu\leftmark}
-  \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
+  % \ifthenelse{\equal{\leftmark}{\cabstractname}}{%
+    % \fancyhead[CE]{\xiaowu\ucas@etitlemark}}{%
+    \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
+  % }%TODO:英文摘要页英文标题页眉，非规定项
   \fancyfoot{}
-  \fancyfoot[RO]{\xiaowu\thepage}
-  \fancyfoot[LE]{\xiaowu\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}}
-\fancypagestyle{ucas@frontheadings}{%
-  \fancyhead{}
-  \fancyhead[CO]{\xiaowu\leftmark}
-  \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
-  \fancyfoot{}
-  \fancyfoot[C]{\xiaowu\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\footrulewidth}{0pt}}
-\fancypagestyle{ucas@eabstractheadings}{%
-  \fancyhead{}
-  \fancyhead[CO]{\xiaowu\leftmark}
-  \fancyhead[CE]{\xiaowu\ucas@etitlemark}
-  \fancyfoot{}
-  \fancyfoot[C]{\xiaowu\thepage}
+  \if@mainmatter
+    \fancyfoot[RO]{\xiaowu\thepage}
+    \fancyfoot[LE]{\xiaowu\thepage}  
+  \else
+    \fancyfoot[C]{\xiaowu\thepage}
+  \fi
   \renewcommand{\headrulewidth}{0.4pt}
   \renewcommand{\footrulewidth}{0pt}}
 \ctexset{%
@@ -424,7 +410,7 @@
 \ctexset{%
   chapter={
     afterindent=true,
-    % pagestyle={ucas@headings},
+    pagestyle={ucas@headings},
     beforeskip={9bp},
     aftername=\hskip\ccwd,
     afterskip={18bp},
@@ -747,7 +733,6 @@
   \cleardoublepage
   \ucas@chapter*[]{\eabstractname} % no tocline
   \ucas@eabstract
-  \thispagestyle{ucas@eabstractheadings}
   \vskip12bp
   \ucas@put@keywords{%
     \textbf{\ucas@ekeywords@title\enskip}}{\ucas@ekeywords}}
@@ -837,8 +822,10 @@
 }{}{}
 \let\ucas@appendix\appendix
 \renewenvironment{appendix}{%
+  \cleardoublepage
   \let\title\ucas@appendix@title
-  \ucas@appendix}{%
+  \ucas@appendix
+  }{%TODO:页眉显示“附  录”，非严格要求
   \let\title\@gobble}
 \let\title\@gobble
 \newcommand{\ucas@appendix@title}[1]{%
