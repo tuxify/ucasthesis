@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-14 22:06
+%% Last modified: 2019-11-15 11:16
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -259,15 +259,18 @@
 \fancypagestyle{ucas@headings}{%
   \fancyhead{}
   \fancyhead[CO]{\xiaowu\leftmark}
-  % \ifthenelse{\equal{\leftmark}{\cabstractname}}{%
-    % \fancyhead[CE]{\xiaowu\ucas@etitlemark}}{%
+  % 英语摘要部分偶数页设置为英语论文题目（规范中没有要求）
+  % \leftmark 更新滞后，按英文摘要的前一章（即中文摘要）判断
+  \ifthenelse{\equal{\leftmark}{\cabstractname}}{%
+    \fancyhead[CE]{\xiaowu\ucas@etitlemark}}{%
     \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
-  % }%TODO:英文摘要页英文标题页眉，非规定项
+  }
   \fancyfoot{}
-  \if@mainmatter
+  % 根据在论文中的位置设置页脚
+  \if@mainmatter% 正文部分及之后
     \fancyfoot[RO]{\xiaowu\thepage}
     \fancyfoot[LE]{\xiaowu\thepage}  
-  \else
+  \else% 摘要至正文部分之前
     \fancyfoot[C]{\xiaowu\thepage}
   \fi
   \renewcommand{\headrulewidth}{0.4pt}
@@ -353,9 +356,9 @@
 \newtheorem{remark}{\ucas@remark@name}[chapter]
 \newtheorem{problem}{\ucas@problem@name}[chapter]
 \newtheorem{conjecture}{\ucas@conjecture@name}[chapter]
-% \setlength{\floatsep}{20bp \@plus4pt \@minus1pt}
-\setlength{\intextsep}{20bp \@plus4pt \@minus2pt}
-% \setlength{\textfloatsep}{20bp \@plus4pt \@minus2pt}
+\setlength{\floatsep}{12bp \@plus2bp \@minus4bp}
+\setlength{\intextsep}{12bp}
+\setlength{\textfloatsep}{12bp}
 \setlength{\@fptop}{0bp \@plus1.0fil}
 \setlength{\@fpsep}{12bp \@plus2.0fil}
 \setlength{\@fpbot}{0bp \@plus1.0fil}
@@ -728,11 +731,13 @@
   \vskip12bp
   \ucas@put@keywords{\bfseries\ucas@ckeywords@title}{\ucas@ckeywords}
   \cleardoublepage
+  \pagestyle{ucas@headings}
   \ucas@chapter*[]{\eabstractname} % no tocline
   \ucas@eabstract
   \vskip12bp
   \ucas@put@keywords{%
-    \textbf{\ucas@ekeywords@title\enskip}}{\ucas@ekeywords}}
+    \textbf{\ucas@ekeywords@title\enskip}}{\ucas@ekeywords}
+  \pagestyle{ucas@headings}}
 \newenvironment{denotation}[1][2.5cm]{%
   \cleardoublepage
   \ucas@chapter*[1]{\ucas@denotation@name} % with tocline
