@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-15 11:16
+%% Last modified: 2019-11-15 14:04
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -506,6 +506,7 @@
     \expandafter\gdef\csname ucas@#1\endcsname{##1}}
   \csname #1\endcsname{}}
 \ucas@def@term{secretlevel}
+\ucas@def@term{secretyear}
 \ucas@def@term{ctitle}
 \ucas@def@term{ctitlemark}
 \ucas@def@term{etitle}
@@ -514,9 +515,9 @@
 \ucas@def@term{csupervisor}
 \ucas@def@term{csupervisorplace}
 \ucas@def@term{ccosupervisor}
+\ucas@def@term{ccosupervisorplace}
 \ucas@def@term{eauthor}
 \ucas@def@term{esupervisor}
-\ucas@def@term{eassosupervisor}
 \ucas@def@term{ecosupervisor}
 \ucas@def@term{cdegree}
 \ucas@def@term{edegree}
@@ -548,8 +549,9 @@
 \def\ucas@ckeywords@separator{，}
 \def\ucas@ekeywords@separator{,}
 \def\ucas@title@sep{：}
-\def\ucas@secretlevel{密级}
-\def\ucas@secret@content{$\bigstar$}
+\def\ucas@secret@title{密级}
+\def\ucas@secret@content{\ucas@secretlevel%
+          \ $\bigstar$\ \ucas@secretyear 年}
 \def\ucas@schoolname{中国科学院大学}
 \def\ucas@author@title{作者姓名}
 \ifucas@doctor
@@ -586,10 +588,10 @@
   \begin{CJKfilltwosides}{#1}#2\end{CJKfilltwosides}}
 \newcommand{\ucas@first@titlepage}{
   \begin{center}
-    \vspace*{-2cm}
-    \parbox[t][1cm][t]{\textwidth}{%
+    \vspace*{.2cm}
+    \parbox[t][1.2cm][t]{\textwidth}{%
       \ifucas@secret\hfill{\sanhao[1]\sffamily
-        \textbf{\ucas@secretlevel\ucas@title@sep}
+        \textbf{\ucas@secret@title\ucas@title@sep}
         \underline{\makebox[6em]{\ucas@secret@content}}}\fi}
     \begin{center}
       \includegraphics[height=21.59mm]{UCAS}
@@ -607,17 +609,27 @@
         \setlength{\extrarowheight}{2.5ex}
         \begin{tabular}{ll}
           \ucas@author@title\ucas@title@sep     
-            & \underline{\makebox[25em]{\ucas@cauthor}}\\
-          \ucas@supervisor@title\ucas@title@sep%TODO:判断是否存在辅助导师，单位
-            & \underline{\makebox[25em]{\ucas@csupervisor}}\\
-            & \underline{\makebox[25em]{\ucas@ccosupervisor}}\\
-            & \underline{\makebox[25em]{\ucas@csupervisorplace}}\\
+            & \underline{\makebox[24em]{\ucas@cauthor}}\\
+          \ucas@supervisor@title\ucas@title@sep%
+            & \underline{\makebox[24em]{\ucas@csupervisor}}\\
+          \ifthenelse{\equal{\ucas@ccosupervisor}{}}{%if-then #1
+            & \underline{\makebox[24em]{\ucas@csupervisorplace}}\\}{%if-else #1
+            \ifthenelse{\equal{\ucas@ccosupervisorplace}{\ucas@csupervisorplace}
+              \or\equal{\ucas@ccosupervisorplace}{}}{%if-then #2
+              & \underline{\makebox[24em]{\ucas@ccosupervisor}}\\
+              & \underline{\makebox[24em]{\ucas@csupervisorplace}}\\
+              }{%if-else #2
+              & \underline{\makebox[24em]{\ucas@csupervisorplace}}\\
+              & \underline{\makebox[24em]{\ucas@ccosupervisor}}\\
+              & \underline{\makebox[24em]{\ucas@ccosupervisorplace}}\\
+            }%end if #2
+          }%end if #1
           \ucas@degree@title\ucas@title@sep
-            & \underline{\makebox[25em]{\ucas@cdegree}}\\
+            & \underline{\makebox[24em]{\ucas@cdegree}}\\
           \ucas@major@title\ucas@title@sep
-            & \underline{\makebox[25em]{\ucas@cmajor}}\\
+            & \underline{\makebox[24em]{\ucas@cmajor}}\\
           \ucas@put@title{\ucas@department@title}\ucas@title@sep
-            & \underline{\makebox[25em]{\ucas@cdepartment}}\\
+            & \underline{\makebox[24em]{\ucas@cdepartment}}\\
         \end{tabular}
       \end{center}}
     \begin{center}
@@ -637,8 +649,7 @@
     \vspace{24bp}
     \parbox[t][10.8cm][c]{\textwidth}{\sihao\bfseries
       \begin{center}
-        {A \ifucas@master Thesis \else Dissertation \fi
-        Submitted to}\\
+        {A \ifucas@master thesis \else dissertation \fi submitted to}\\
         {University of Chinese Academy of Sciences} \\
         {in partial fulfillment of the requirement}\\
         {for the degree of}\\
@@ -651,7 +662,9 @@
         \begin{tabular}{ll}
           {Supervisor: }
             & {\ucas@esupervisor} \\
-            & {\ucas@ecosupervisor} \\
+            \ifthenelse{\equal{\ucas@ecosupervisor}{}}{\relax}{
+              & {\ucas@ecosupervisor} \\
+            }
         \end{tabular}
       \end{center}}
     \vspace{12bp}
