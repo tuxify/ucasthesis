@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-15 14:04
+%% Last modified: 2019-11-17 15:45
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -782,6 +782,10 @@
 \setlength\bibhang{2\ccwd}
 \addtolength{\bibsep}{-0.7em}
 \setlength{\labelsep}{0.4em}
+\def\ucas@bibetal{等}%
+\def\ucas@biband{和}%
+\def\bibetal{\ucas@bibetal}%
+\def\biband{\ucas@biband}%
 \def\@biblabel#1{[#1]\hfill}
 \expandafter\newcommand\csname bibstyle@gbt7714-unsrt\endcsname{%
   \bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
@@ -809,18 +813,15 @@
   \if\relax\NAT@date\relax\else\NAT@@close\fi
   \if*#2*\else\textsuperscript{#2}\fi
 }{}{}
+\patchcmd{\NAT@citex}{%author-year \citet
+  \NAT@sort@cites{#3}%
+}{%
+  \def\NAT@sort{\z@}% turn off sort
+  \NAT@sort@cites{#3}%TODO:sort by year
+}{}{}
 \renewcommand\NAT@cite%
     [3]{\ifNAT@swa\NAT@@open\if*#2*\else#2\NAT@spacechar\fi
         #1\NAT@@close\if*#3*\else\textsuperscript{#3}\fi\else#1\fi\endgroup}
-\patchcmd{\NAT@citexnum}{%
-  \ifx\NAT@last@yr\relax
-    \def@NAT@last@yr{\@citea}%
-  \else
-    \def@NAT@last@yr{--\NAT@penalty}%
-  \fi
-}{%
-  \def@NAT@last@yr{-\NAT@penalty}%
-}{}{}
 \let\ucas@appendix\appendix
 \renewenvironment{appendix}{%
   \cleardoublepage
