@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-17 15:45
+%% Last modified: 2019-11-19 22:09
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -22,6 +22,8 @@
   prefix=ucas@,
   setkeys=\kvsetkeys}
 \DeclareStringOption[doctor]{degree}[doctor]
+\DeclareStringOption[bibtex]{bibbackend}[bibtex]
+\DeclareStringOption[authoryear]{bibstyle}[authoryear]
 \DeclareBoolOption{secret}
 \DeclareBoolOption{mkshuji}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
@@ -36,6 +38,12 @@
 \newif\ifucas@master
 \newif\ifucas@doctor
 \ucas@validate@key{degree}
+\newif\ifucas@bibtex
+\newif\ifucas@biber
+\ucas@validate@key{bibbackend}
+\newif\ifucas@authoryear
+\newif\ifucas@numbers
+\ucas@validate@key{bibstyle}
 \PassOptionsToPackage{quiet}{xeCJK}
 \LoadClass[a4paper,openany,UTF8,zihao=-4,scheme=plain]{ctexbook}
 \RequirePackage{etoolbox}
@@ -56,7 +64,112 @@
 \RequirePackage{array}
 \RequirePackage{longtable}
 \RequirePackage{booktabs}
-\RequirePackage[sort&compress]{natbib}
+\ifucas@biber% Biber processor + biblatex package
+  \ifucas@numbers% numbered citation style
+    \RequirePackage[natbib,style=gb7714-2015,gbctexset=true,%
+      sortcites]{biblatex}%
+  \fi
+  \ifucas@authoryear% author year citation style
+    \RequirePackage[natbib,style=gb7714-2015ay,gbctexset=true,%
+      % sorting=ydnt,%
+      maxcitenames=2,mincitenames=1,%
+      sortlocale=zh__pinyin]{biblatex}%
+    \DefineBibliographyStrings{english}{
+      andincite = {和},
+      andincitecn = {和},
+      andothersincitecn = {等},
+      andothersincite = {等{\adddot}},%adddot才能避开标点追踪
+    }
+  \fi
+  \defbibheading{bibliography}[\bibname]{%
+    \ucas@chapter*{\bibname}
+  }
+  \renewcommand\bibfont{\wuhao[1.5]}
+  \setlength{\biblabelsep}{0.4em}
+  \setlength{\bibitemsep}{0bp}
+  % \setlength\bibhang{2em}
+  % superscript page number
+  \DeclareFieldFormat{postnote}{#1}
+  \DeclareCiteCommand{\parencite}
+    {\usebibmacro{cite:init}%
+    \renewbibmacro*{postnote}{%
+    \iffieldundef{postnote}
+      {}
+      {\nopunct%
+       \printfield{postnote}}}%
+      (\usebibmacro{prenote}}%)
+    {\usebibmacro{citeindex}%
+     \usebibmacro{cite}}
+    {}
+    {%(
+    )\mkbibsuperscript{\usebibmacro{postnote}}}
+\fi
+\ifucas@bibtex
+  \ifucas@numbers% numbered citation style
+    \RequirePackage[sort&compress]{natbib}%
+    \bibliographystyle{gbt7714-unsrt}%
+  \fi
+  \ifucas@authoryear% author year citation style
+    \RequirePackage{natbib}%
+    \bibliographystyle{gbt7714-plain}%
+  \fi
+  % Set punctuation and mode of citation style
+  \expandafter\newcommand\csname bibstyle@gbt7714-unsrt\endcsname{%
+    \bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
+  \expandafter\newcommand\csname bibstyle@gbt7714-plain\endcsname{%
+    \bibpunct{(}{)}{;}{a}{,}{,}}
+  \def\ucas@bibetal{等}%
+  \def\ucas@biband{和}%
+  \def\bibetal{\ucas@bibetal}%
+  \def\biband{\ucas@biband}%
+  \renewcommand\bibsection{\ucas@chapter*{\bibname}}
+  \renewcommand\bibfont{\wuhao[1.5]}
+  \setlength\bibhang{2\ccwd}
+  \setlength{\labelsep}{0.4em}
+  \addtolength{\bibsep}{-0.7em}
+  \def\@biblabel#1{[#1]\hfill}
+  % numberic mode: superscript page number
+  \patchcmd\NAT@citexnum{% \citet
+    \@ifnum{\NAT@ctype=\z@}{%
+      \if*#2*\else\NAT@cmt#2\fi
+    }{}%
+    \NAT@mbox{\NAT@@close}%
+  }{%
+    \NAT@mbox{\NAT@@close}%
+    \@ifnum{\NAT@ctype=\z@}{%
+      \if*#2*\else\textsuperscript{#2}\fi
+    }{}%
+  }{}{}
+  \patchcmd{\NAT@citesuper}{%
+    \textsuperscript{\NAT@@open#1\NAT@@close}%
+      \if*#3*\else\NAT@spacechar#3\fi
+  }{%
+    \textsuperscript{\NAT@@open#1\NAT@@close\if*#3*\else#3\fi}
+  }{}{}
+  % numberical mode: 2 or more consecutive bibliographies connected by -
+  \patchcmd{\NAT@citexnum}{%
+    \ifx\NAT@last@yr\relax
+      \def@NAT@last@yr{\@citea}%
+    \else
+      \def@NAT@last@yr{--\NAT@penalty}%
+    \fi
+  }{%
+    \def@NAT@last@yr{-\NAT@penalty}%
+  }{}{}
+  % authoryear mode: superscript page number
+  \patchcmd{\NAT@citex}{% \citet
+    \if*#2*\else\NAT@cmt#2\fi
+    \if\relax\NAT@date\relax\else\NAT@@close\fi
+  }{%
+    \if\relax\NAT@date\relax\else\NAT@@close\fi
+    \if*#2*\else\textsuperscript{#2}\fi
+  }{}{}
+  \patchcmd{\NAT@cite}{%
+    \if*#3*\else\NAT@cmt#3\fi\NAT@@close
+  }{%
+    \NAT@@close\if*#3*\else\textsuperscript{#3}\fi
+  }{}{}
+\fi
 \RequirePackage{hyperref}
 \hypersetup{%
   linktoc            = all,
@@ -773,55 +886,10 @@
   }{\vskip 48bp\hfill\ucas@ackdate}
 \let\ack\acknowledgement
 \let\endack\endacknowledgement
-\newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
-\DeclareRobustCommand\inlinecite{\@inlinecite}
-\def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
-\let\onlinecite\inlinecite
-\renewcommand\bibsection{\ucas@chapter*{\bibname}}
-\renewcommand\bibfont{\wuhao[1.5]}
-\setlength\bibhang{2\ccwd}
-\addtolength{\bibsep}{-0.7em}
-\setlength{\labelsep}{0.4em}
-\def\ucas@bibetal{等}%
-\def\ucas@biband{和}%
-\def\bibetal{\ucas@bibetal}%
-\def\biband{\ucas@biband}%
-\def\@biblabel#1{[#1]\hfill}
-\expandafter\newcommand\csname bibstyle@gbt7714-unsrt\endcsname{%
-  \bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
-\expandafter\newcommand\csname bibstyle@gbt7714-plain\endcsname{%
-  \bibpunct{(}{)}{;}{a}{,}{,}}
-\patchcmd\NAT@citexnum{%
-  \@ifnum{\NAT@ctype=\z@}{%
-    \if*#2*\else\NAT@cmt#2\fi
-  }{}%
-  \NAT@mbox{\NAT@@close}%
-}{%
-  \NAT@mbox{\NAT@@close}%
-  \@ifnum{\NAT@ctype=\z@}{%
-    \if*#2*\else\textsuperscript{#2}\fi
-  }{}%
-}{}{}
-\renewcommand\NAT@citesuper[3]{\ifNAT@swa
-  \if*#2*\else#2\NAT@spacechar\fi
-\unskip\kern\p@\textsuperscript{\NAT@@open#1\NAT@@close\if*#3*\else#3\fi}%
-   \else #1\fi\endgroup}
-\patchcmd{\NAT@citex}{%
-  \if*#2*\else\NAT@cmt#2\fi
-  \if\relax\NAT@date\relax\else\NAT@@close\fi
-}{%
-  \if\relax\NAT@date\relax\else\NAT@@close\fi
-  \if*#2*\else\textsuperscript{#2}\fi
-}{}{}
-\patchcmd{\NAT@citex}{%author-year \citet
-  \NAT@sort@cites{#3}%
-}{%
-  \def\NAT@sort{\z@}% turn off sort
-  \NAT@sort@cites{#3}%TODO:sort by year
-}{}{}
-\renewcommand\NAT@cite%
-    [3]{\ifNAT@swa\NAT@@open\if*#2*\else#2\NAT@spacechar\fi
-        #1\NAT@@close\if*#3*\else\textsuperscript{#3}\fi\else#1\fi\endgroup}
+% \newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
+% \DeclareRobustCommand\inlinecite{\@inlinecite}
+% \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+% \let\onlinecite\inlinecite
 \let\ucas@appendix\appendix
 \renewenvironment{appendix}{%
   \cleardoublepage

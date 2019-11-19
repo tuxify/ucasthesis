@@ -3,14 +3,20 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-16 13:08
+%% Last modified: 2019-11-19 22:16
 %%================================================
-\documentclass[degree=doctor]{ucasthesis}
-% \documentclass[degree=doctor]{ucasthesis}
+\documentclass{ucasthesis}
+% \documentclass[degree=doctor,
+%                bibbackend=bibtex,
+%                bibstyle=authoryear,
+%                secret,
+%                mkshuji]{ucasthesis}
 % 选项：
-%   degree=[master|doctor],                   % 必选
-%   secret,                                   % 可选
-%   mkshuji,                                  % 可选
+%   degree=[master|doctor],           % 必选，默认 doctor
+%   bibbackend=[bibtex|biber],        % 必选，默认 bibtex
+%   bibstyle=[authoryear|numbers],    % 必选，默认 authoryear
+%   secret,                           % 可选
+%   mkshuji,                          % 可选
 % 注意：mkshuji 选项需要系统中安装 Noto Sans CJK SC 字体
 
 % 所有其它可能用到的包都统一放到这里了，可以根据自己的实际添加或者删除。
@@ -21,6 +27,13 @@
 
 % 可以在这里修改配置文件中的定义。导言区可以使用中文。
 % \def\myname{赵钱孙}
+
+% 参考文献：采用 biber 时文献库应在这里
+\makeatletter
+\ifucas@biber
+  \addbibresource{ref/biber_refs.bib}%
+\fi
+\makeatother
 
 \begin{document}
 
@@ -49,10 +62,14 @@
 
 %% 参考文献
 % 注意：至少需要引用一篇参考文献，否则下面可能引起编译错误。
-% 如果不需要参考文献，请将下面两行删除或注释掉。
-% \bibliographystyle{gbt7714-unsrt}
-\bibliographystyle{gbt7714-plain}
-\bibliography{ref/refs}
+% 如果不需要参考文献，请将下面删除或注释掉。
+\makeatletter
+\ifucas@biber
+  \printbibliography
+\else
+  \bibliography{ref/bibtex_refs.bib}
+\fi
+\makeatother
 
 %% 附录
 \begin{appendix}
