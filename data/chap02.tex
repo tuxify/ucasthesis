@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2019-11-10 10:32
-%% Last modified: 2019-11-18 22:02
+%% Last modified: 2019-11-20 10:49
 %%================================================
 \chapter{模板使用示例 Some Examples}
 \label{cha:examples}
@@ -365,21 +365,21 @@ Java是一种跨平台的编程语言。
 正文中的标注方式分两种：其一，正文里已出现著作者姓名的，在其后用圆括号附上出版年份即可；其二，正文里仅提及有关的资料内容而未提到著作者，则在相应文句处用圆括号标注著作者姓名和出版年份，两者之间以逗号隔开（圆括号、逗号使用中文半角符号）。例如：
 \citet{nadkarni1992} 根据……的研究，首次提出……。其中关于……\citep{nadkarni1992}，是当前中国……得到迅速发展的研究领域\citep{zhu1973}。
 
-引用同一著者在同一年份出版的多篇文献时，在出版年份之后用英文小写字母a、b、c……区别。如：\citep{chen2001a,chen2001b}。
+引用同一著者在同一年份出版的多篇文献时，在出版年份之后用英文小写字母a、b、c……区别。如：\citet{chen2001a,chen2001b}。
 
 多处引用同一著者的同一文献时，在“（ ）”外以角标的形式著录引文页码。例如：\citep[][343-351]{hua1973}。
 
-引用有两个以上同姓的著者的外文文献时，则著者要加名字的缩写，但不必加缩写点。例如：\citep{nadkarni1992,nadkarni1992mechanism}。
+引用有两个以上同姓的著者的外文文献时，则著者要加名字的缩写，但不必加缩写点。例如： M A \citet{nadkarni1992}; K \citet{nadkarni1992mechanism}。
 
-\textbf{注意：}模板尚不能区分同姓作者，暂时可通过手动加名字缩写解决，比如：\citep[M A ][]{nadkarni1992}; \citep[K][]{nadkarni1992mechanism}以及 M A \citet{nadkarni1992}; K \citet{nadkarni1992mechanism}。\textbf{apacite} 宏包可能有比较适合的解决方案。%TODO:
+% \textbf{注意：}模板尚不能区分同姓作者，暂时可通过手动加名字缩写解决，比如：\citep[M A ][]{nadkarni1992}; \citep[K][]{nadkarni1992mechanism}以及 M A \citet{nadkarni1992}; K \citet{nadkarni1992mechanism}。\textbf{apacite} 宏包可能有比较适合的解决方案。%TODO:
 
-引用多位著者的文献时，对欧美著者只需标注第一个著者的姓，其后附“等.”，仅两位作者的全部注出，中间用“和”；对中文著者应该标注第一著者的姓名，其后附“等”字，姓名与“等”字之间留一个空格。例如：\citep{nadkarni1992}，\citep{nair1992}，\citep{zhu1973}，\citep{hua1973}。
+引用多位著者的文献时，对欧美著者只需标注第一个著者的姓，其后附“等.”，仅两位作者的全部注出，中间用“和”；对中文著者应该标注第一著者的姓名，其后附“等”字，姓名与“等”字之间留一个空格。例如：\citet{nadkarni1992}，\citet{nair1992}，\citet{zhu1973}，\citet{hua1973}。
 
-\textbf{注意：}规范中欧美著者姓后附“等.”，但示例中，仅第二种标注方式，即正文中未提及著者的标注中，后附的“等”字后面才有英文句点“.”。在 \texttt{bst} 文件中可以设置对不同语言姓后的附词，宏包 \textbf{natbib} 中则可以通过重新定义 \verb|\NAT@aysep| 对不同标注模式设置不同的附词。目前还无法完全实现符合规范要求的形式。%TODO:
+% \textbf{注意：}规范中欧美著者姓后附“等.”，但示例中，仅第二种标注方式，即正文中未提及著者的标注中，后附的“等”字后面才有英文句点“.”。在 \texttt{bst} 文件中可以设置对不同语言姓后的附词，宏包 \textbf{natbib} 中则可以通过重新定义 \verb|\NAT@aysep| 对不同标注模式设置不同的附词。目前还无法完全实现符合规范要求的形式。%TODO:
 
 同一处引用多篇文献时，按出版年份由近及远依次标注，中间用分号分开。例如：\citet{nadkarni1992,hua1973,huo1981,timoshenko1959,ding2001}。
 
-\textbf{注意：}模板尚未实现引用项按出版年份排序功能，按用户输入顺序显示。可能的一个解决方法是重新定义 \textbf{natbib} 中的 \verb|\NAT@sort@cites|。 %TODO:
+% \textbf{注意：}模板尚未实现引用项按出版年份排序功能，按用户输入顺序显示。可能的一个解决方法是重新定义 \textbf{natbib} 中的 \verb|\NAT@sort@cites|。 %TODO:
 
 使用著者-出版年制（authoryear）式参考文献样式时，中文文献必须在BibTeX索引信息的 \textbf{key} 域（请参考refs.bib文件）填写作者姓名的拼音，才能使得文献列表按照拼音排序。参考文献表中的条目（不排序号），先按语种分类排列，语种顺序是：中文、日文、英文、俄文、其他文种。然后，中文按汉语拼音字母顺序排列，日文按第一著者的姓氏笔画排序，西文和俄文按第一著者姓氏首字母顺序排列。如中 \citep{niu2013zonghe}、日 \citep{Bohan1928}、英 \citep{stamerjohanns2009mathml}、俄 \citep{Dubrovin1906}。
 
@@ -397,7 +397,7 @@ Java是一种跨平台的编程语言。
 
 \subsection{顺序编码制的著录规则}
 
-参考文献如果按照顺序编码制著录，可参照GB/T 7714—2015《信息与文献 参考文献著录规则》执行。
+参考文献如果按照顺序编码制著录，可参照GB/T 7714—2015《信息与文献 参考文献著录规则》执行。顺序编码制通常有两种引用模式，上标引用\cite{li2002}和文内引用\inlinecite{li2002}。
 
 \subsubsection{专著}
 
@@ -412,8 +412,7 @@ Java是一种跨平台的编程语言。
 \subsubsection{连续出版物}
 
 一种载有卷期号或年月顺序号、计划无限期地连续出版发行的出版物，包括以各种载体形式出版的期刊、报纸等。
-% \cite{zhong1936,zhongtu1957,aaas1883}
-\cite{zhong1936,zhongtu1957}
+\cite{zhong1936,zhongtu1957,aaas1883}
 
 \subsubsection{期刊、报纸等连续出版物中的析出文献}
 

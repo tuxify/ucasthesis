@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-19 22:09
+%% Last modified: 2019-11-20 11:06
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -23,7 +23,7 @@
   setkeys=\kvsetkeys}
 \DeclareStringOption[doctor]{degree}[doctor]
 \DeclareStringOption[bibtex]{bibbackend}[bibtex]
-\DeclareStringOption[authoryear]{bibstyle}[authoryear]
+\DeclareStringOption[numbers]{bibstyle}[numbers]
 \DeclareBoolOption{secret}
 \DeclareBoolOption{mkshuji}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
@@ -80,29 +80,29 @@
       andothersincitecn = {等},
       andothersincite = {等{\adddot}},%adddot才能避开标点追踪
     }
+    % superscript page number
+    \DeclareFieldFormat{postnote}{#1}
+    \DeclareCiteCommand{\parencite}
+      {\usebibmacro{cite:init}%
+      \renewbibmacro*{postnote}{%
+      \iffieldundef{postnote}
+        {}
+        {\nopunct%
+         \printfield{postnote}}}%
+        (\usebibmacro{prenote}}%)
+      {\usebibmacro{citeindex}%
+       \usebibmacro{cite}}
+      {}
+      {%(
+      )\mkbibsuperscript{\usebibmacro{postnote}}}
   \fi
+  \let\inlinecite\parencite
   \defbibheading{bibliography}[\bibname]{%
     \ucas@chapter*{\bibname}
   }
   \renewcommand\bibfont{\wuhao[1.5]}
   \setlength{\biblabelsep}{0.4em}
   \setlength{\bibitemsep}{0bp}
-  % \setlength\bibhang{2em}
-  % superscript page number
-  \DeclareFieldFormat{postnote}{#1}
-  \DeclareCiteCommand{\parencite}
-    {\usebibmacro{cite:init}%
-    \renewbibmacro*{postnote}{%
-    \iffieldundef{postnote}
-      {}
-      {\nopunct%
-       \printfield{postnote}}}%
-      (\usebibmacro{prenote}}%)
-    {\usebibmacro{citeindex}%
-     \usebibmacro{cite}}
-    {}
-    {%(
-    )\mkbibsuperscript{\usebibmacro{postnote}}}
 \fi
 \ifucas@bibtex
   \ifucas@numbers% numbered citation style
@@ -118,7 +118,10 @@
     \bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
   \expandafter\newcommand\csname bibstyle@gbt7714-plain\endcsname{%
     \bibpunct{(}{)}{;}{a}{,}{,}}
-  \def\ucas@bibetal{等}%
+  \newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
+  \DeclareRobustCommand\inlinecite{\@inlinecite}
+  \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+  \def\ucas@bibetal{等{.}}%
   \def\ucas@biband{和}%
   \def\bibetal{\ucas@bibetal}%
   \def\biband{\ucas@biband}%
@@ -886,10 +889,6 @@
   }{\vskip 48bp\hfill\ucas@ackdate}
 \let\ack\acknowledgement
 \let\endack\endacknowledgement
-% \newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
-% \DeclareRobustCommand\inlinecite{\@inlinecite}
-% \def\@inlinecite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
-% \let\onlinecite\inlinecite
 \let\ucas@appendix\appendix
 \renewenvironment{appendix}{%
   \cleardoublepage
