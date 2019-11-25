@@ -3,11 +3,11 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-20 11:06
+%% Last modified: 2019-11-25 09:16
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
-[2019/11/20 1.0.0 University of Chinese Academy of Sciences Thesis Template]
+[2019/11/21 1.0.0 University of Chinese Academy of Sciences Thesis Template]
 \RequirePackage{ifxetex}
 \ifxetex\else
   \ClassError{ucasthesis}{You should use XeLaTeX}{}
@@ -107,16 +107,16 @@
 \ifucas@bibtex
   \ifucas@numbers% numbered citation style
     \RequirePackage[sort&compress]{natbib}%
-    \bibliographystyle{gbt7714-unsrt}%
+    \bibliographystyle{ucasthesis-numeric}%
   \fi
   \ifucas@authoryear% author year citation style
     \RequirePackage{natbib}%
-    \bibliographystyle{gbt7714-plain}%
+    \bibliographystyle{ucasthesis-author-year}%
   \fi
   % Set punctuation and mode of citation style
-  \expandafter\newcommand\csname bibstyle@gbt7714-unsrt\endcsname{%
+  \expandafter\newcommand\csname bibstyle@ucasthesis-numeric\endcsname{%
     \bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
-  \expandafter\newcommand\csname bibstyle@gbt7714-plain\endcsname{%
+  \expandafter\newcommand\csname bibstyle@ucasthesis-author-year\endcsname{%
     \bibpunct{(}{)}{;}{a}{,}{,}}
   \newcommand\bibstyle@inline{\bibpunct{[}{]}{,}{n}{,}{,}}
   \DeclareRobustCommand\inlinecite{\@inlinecite}
@@ -375,12 +375,7 @@
 \fancypagestyle{ucas@headings}{%
   \fancyhead{}
   \fancyhead[CO]{\xiaowu\leftmark}
-  % 英语摘要部分偶数页设置为英语论文题目（规范中没有要求）
-  % \leftmark 更新滞后，按英文摘要的前一章（即中文摘要）判断
-  \ifthenelse{\equal{\leftmark}{\cabstractname}}{%
-    \fancyhead[CE]{\xiaowu\ucas@etitlemark}}{%
-    \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
-  }
+  \fancyhead[CE]{\xiaowu\ucas@ctitlemark}
   \fancyfoot{}
   % 根据在论文中的位置设置页脚
   \if@mainmatter% 正文部分及之后
@@ -395,7 +390,8 @@
   punct=quanjiao,
   space=auto,
   autoindent=true}
-\setlist{nosep}
+\setlist{leftmargin=*, nosep}
+\setlist[1]{labelindent=\parindent} % Only the level 1
 \ifthenelse{\equal{\ucas@fontset}{mac}}{
   \newfontfamily\ucas@circlefont{Songti SC Light}
 }{
@@ -505,9 +501,6 @@
 \renewcommand{\thesubtable}{(\alph{subtable})}
 \let\ucas@LT@array\LT@array
 \def\LT@array{\wuhao[1.5]\ucas@LT@array} % set default font size
-\def\hlinewd#1{%
-  \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
-    \reserved@a\@xhline}
 \newcommand{\cabstractname}{摘\hspace{\ccwd}要}
 \newcommand{\eabstractname}{Abstract}
 \let\CJK@todaysave=\today
@@ -860,7 +853,7 @@
   \vskip12bp
   \ucas@put@keywords{\bfseries\ucas@ckeywords@title}{\ucas@ckeywords}
   \cleardoublepage
-  \pagestyle{ucas@headings}
+  \fancyhead[CE]{\xiaowu\ucas@etitlemark}
   \ucas@chapter*[]{\eabstractname} % no tocline
   \ucas@eabstract
   \vskip12bp
