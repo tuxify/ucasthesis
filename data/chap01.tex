@@ -3,10 +3,101 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2019-11-10 10:30
-%% Last modified: 2019-11-10 10:34
+%% Last modified: 2019-11-25 09:22
 %%================================================
-\chapter{模板说明 Introduction}
+\chapter{模板简介及使用说明 Introduction}
 \label{cha:introduction}
 
+\ucasthesis{}(\textbf{U}niversity of the \textbf{C}hinese \textbf{A}cademy of \textbf{S}ciences \LaTeX{} \textbf{Thesis} Template) 是中国科学院大学研究生学位 \LaTeX{} 论文模板，根据清华大学学位论文模板（\textbf{thuthesis}）修改而来。
 
+本文档将尽量完整的介绍模板的使用方法，并给出示例。如有不清楚之处可以向作者提问，也非常欢迎有兴趣者共同完善此模板。
 
+\section{模板安装及编译运行}
+\label{sec:install}
+
+该模板可以在项目 \href{https://github.com/tuxify/ucasthesis}{\emph{GitHub 主页}} 下载 \href{https://github.com/tuxify/ucasthesis/releases}{\textbf{发布版本}} 或者 \href{https://codeload.github.com/tuxify/ucasthesis/zip/master}{\textbf{开发版本}}。下载后进入模板主目录即可编译生成示例文档，模板在 \TeXLive{} 2019 下编译通过，建议采用最新版本的 \TeXLive{} 软件发行套装 \footnote{软件的安装参见：\url{http://tug.org/texlive/acquire.html}}。示例文档的生成有很多种方法，这里分别给出手动逐条运行命令和采用自动运行脚本两种编译方法的示例。
+
+手动运行时，需要多次运行编译指令，直到不再出现警告为止。根据所采用的参考文献后端，需要执行不同的命令。采用 \texttt{bibtex} 处理参考文献时，需运行如下命令：
+\begin{description}
+  \item[\$] xelatex main
+  \item[\$] bibtex main
+  \item[\$] xelatex main
+  \item[\$] xelatex main
+\end{description}
+
+采用 \texttt{biblatex} 处理参考文献时，需运行如下命令：
+\begin{description}
+  \item[\$] xelatex main
+  \item[\$] biber main
+  \item[\$] xelatex main
+  \item[\$] xelatex main
+\end{description}
+
+自动运行则可以采用 latexmk 命令全自动生成文档，该命令会自动运行多次工具直到交叉引用都被解决。需运行的命令如下：
+\begin{description}
+  \item[\$] latexmk -xelatex main
+\end{description}
+
+模板作者使用的开发环境是 \emph{Visual Studio Code 编辑器 + LaTeX Workshop 插件} 的组合工具，可以配置使用 \texttt{latexmk} 命令一键编译，具体配置方法可以参考网上的相关教程。
+
+\section{封面相关}
+\label{sec:cover}
+
+封面的例子请参看 \texttt{data} 目录下的 \texttt{cover.tex}，直接修改相关的配置即可，不需要的命令可以删除或者注释掉，里面的命令都很直观，一看即会。其它文件也类似，摘要参见 \texttt{abstract.tex}，主要符号表 \texttt{denotation.tex}，正文章节 \texttt{chap01.tex} 和 \texttt{chap02.tex}，附录 \texttt{app01.tex} 和 \texttt{app02.tex}，致谢\texttt{ack.tex} 个人简历 \texttt{resume.tex}。其中正文章节和附录均可新增文件，之后添加到 \texttt{main.tex} 文件相应部分即可。
+
+\section{字体字号}
+\label{sec:font}
+
+模板默认使用 \CTeX\ 的字体配置，字体切换及字号命令可以参考 \CTeX\ 文档。此外，模板还定义了一系列字号命令，如下表所示。
+
+\begin{center}
+  \begin{tabular}{llllll}
+    \toprule
+    \texttt{chuhao} & \texttt{xiaochu} & \texttt{yihao}  & \texttt{xiaoyi}    & \texttt{erhao}  & \texttt{xiaoer}\\
+    \texttt{sanhao} & \texttt{xiaosan} & \texttt{sihao}  & \texttt{banxiaosi} & \texttt{xiaosi} & \texttt{dawu}\\
+    \texttt{wuhao}  & \texttt{xiaowu}  & \texttt{liuhao} & \texttt{xiaoliu}   & \texttt{qihao}  & \texttt{bahao}\\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+使用方法为：\verb|\command[<num>]|，其中 \texttt{command} 为字号命令，\texttt{num} 为行距。比如 \verb|\xiaosi[1.5]| 表示选择小四字体，行距 1.5 倍。
+
+\section{插图表格}
+\label{sec:fig_tab}
+
+为了满足规范对插图和表格标题采用中英文双语的要求，模板调用 \textbf{bicaption} 宏包实现，并对格式部分进行了定制，用法为：
+\begin{verbatim}
+  \bicaption{<中文标题>}
+            {<英文标题>}
+  \label{<标签>}
+\end{verbatim}
+具体可参见第 \ref{cha:examples} 章的示例，并可查阅该宏包文档了解更多用法。
+
+\section{参考文献}
+\label{sec:ref}
+
+模板同时支持 \textbf{bibtex} 和 \textbf{biblatex}（\textbf{biber}）生成参考文献，可以根据需要选择。其中，\textbf{bibtex} 通过 \texttt{ucasthesis-author-year.bst} 和 \texttt{ucasthesis-numeric.bst} 分别提供著者-出版年制和顺序编码制的引用风格。由于 \textbf{gbt7714} 项目提供的文献风格中，支持国科大的选项尚处于开发阶段，本模板所提供的两个文件基于现有开发版中 \texttt{gbt7714-plain.bst} 和 \texttt{gbt7714-unsrt.bst} 进行了部分修改，以期尽可能满足国科大的参考文献格式。
+
+\textbf{biblatex} 方式则采用 \texttt{biblatex-gb7714-2015} 分别提供两种引用模式的支持，并通过 \texttt{natbib} 选项保证文献调用命令与 \textbf{bibtex} 方法兼容。当采用著者-出版年制时，建议的命令为 \verb|\citet| 和 \verb|\citep|；采用顺序编码制时，建议的命令为 \verb|\cite| 和 \verb|\inlinecite|。相关示例请参见第 \ref{cha:examples} 章。
+
+\section{其它命令}
+\label{sec:other}
+
+\subsection{书脊}
+
+模板定义了生成书脊的命令 \verb|\shuji[<标题>][<作者>][<学校名称>]|，默认参数为论文中文题目、作者及学校名称。在论文选项中选择 \texttt{mkshuji} 选项可以直接在封面页后根据默认参数生成书脊，有需要的可以自行定制。
+
+\emph{注意：该选项需要系统安装 Noto Sans CJK SC 字体。}
+
+\subsection{符号列表}
+
+示例文件中，给出了手动输入主要符号列表的方法，另外还可以通过 \textbf{nomencl} 宏包生成,即在导言区设置：
+\begin{verbatim}
+  \usepackage{nomencl}
+  \makenomenclature
+\end{verbatim}
+然后在正文中任意位置使用 \verb|\nomenclature| 声明需要添加到主要符号表的符号：
+\begin{verbatim}
+  \nomenclature{<符号>}{<对应解释>}
+\end{verbatim}
+最后使用 \verb|\printnomenclature| 命令生成符号表。更详细的使用方法参见 \textbf{nomencl} 宏包的文档。
