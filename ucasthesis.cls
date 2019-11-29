@@ -1,9 +1,9 @@
 %%================================================
-%% File: ucasthesis.cls
+%% Filename: ucasthesis.cls
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-25 09:16
+%% Last modified: 2019-11-29 10:16
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
