@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-29 10:16
+%% Last modified: 2020-10-17 00:21
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -896,10 +896,10 @@
   \vspace{32bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{14bp}}
 \newlist{publications}{enumerate}{1}
 \setlist[publications]{label=[\arabic*],align=left,nosep,itemsep=8bp,
-  leftmargin=10mm,labelsep=!,before=\xiaosi[1.26],resume}
+  labelindent=0pt,leftmargin=10mm,labelsep=!,before=\xiaosi[1.26],resume}
 \newlist{achievements}{enumerate}{1}
 \setlist[achievements]{label=[\arabic*],align=left,nosep,itemsep=8bp,
-  leftmargin=10mm,labelsep=!,before=\xiaosi[1.26]}
+  labelindent=0pt,leftmargin=10mm,labelsep=!,before=\xiaosi[1.26]}
 \def\publicationskip{\bigskip\bigskip}
 \newcommand\ucas@atendpackage{\csname ctex_at_end_package:nn\endcsname}
 \ucas@atendpackage{nomencl}{
