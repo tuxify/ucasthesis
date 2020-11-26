@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2020-10-17 00:21
+%% Last modified: 2020-11-26 01:41
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -45,7 +45,7 @@
 \newif\ifucas@numbers
 \ucas@validate@key{bibstyle}
 \PassOptionsToPackage{quiet}{xeCJK}
-\LoadClass[a4paper,openany,UTF8,zihao=-4,scheme=plain]{ctexbook}
+\LoadClass[a4paper,openany,UTF8,zihao=-4,scheme=plain,sub4section]{ctexbook}
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \RequirePackage{amsmath}
@@ -305,10 +305,10 @@
 }{}
 \renewcommand\normalsize{%
   \@setfontsize\normalsize{12bp}{23.4bp}%根据Word微调
-  \abovedisplayskip=12bp \@plus 2bp \@minus 2bp
-  \abovedisplayshortskip=12bp \@plus 1bp \@minus 1bp
-  \belowdisplayskip=12bp \@plus 2bp \@minus 2bp
-  \belowdisplayshortskip=12bp \@plus 1bp \@minus 1bp}
+  \abovedisplayskip=6bp \@plus 1bp \@minus 1bp%space above equations
+  \abovedisplayshortskip=6bp \@plus 1bp \@minus 1bp%space above short equations
+  \belowdisplayskip=6bp \@plus 1bp \@minus 1bp%space below equations
+  \belowdisplayshortskip=6bp \@plus 1bp \@minus 1bp}%space below short equations
 \def\ucas@def@fontsize#1#2{%
   \expandafter\newcommand\csname #1\endcsname[1][1.3]{%
     \fontsize{#2}{##1\dimexpr #2}\selectfont}}
@@ -548,8 +548,19 @@
     afterskip={6bp \@plus .2ex},
     format={\sffamily\xiaosi},
   },
-  paragraph/afterindent=true,
-  subparagraph/afterindent=true}
+  paragraph={
+    afterindent=true,
+    indent=\parindent,
+    beforeskip={6bp\@plus 1ex \@minus .2ex},
+    afterskip={6bp \@plus .2ex},
+    format={\sffamily\xiaosi},
+  },
+  subparagraph={
+    afterindent=true,
+    beforeskip={6bp\@plus 1ex \@minus .2ex},
+    afterskip={6bp \@plus .2ex},
+    format={\sffamily\xiaosi},
+  }}
 \newcounter{ucas@bookmark}
 \NewDocumentCommand\ucas@chapter{s o m o}{
   \IfBooleanF{#1}{%
@@ -860,6 +871,7 @@
   \ucas@put@keywords{%
     \textbf{\ucas@ekeywords@title\enskip}}{\ucas@ekeywords}
   \pagestyle{ucas@headings}}
+% use nomenclature instead
 \newenvironment{denotation}[1][2.5cm]{%
   \cleardoublepage
   \ucas@chapter*[1]{\ucas@denotation@name} % with tocline
@@ -875,6 +887,14 @@
   labelwidth=2.5cm,
   labelsep*=0.5cm,
   itemindent=0pt,
+}
+\newenvironment{nomenclature}[1][\ucas@denotation@name]{%
+  \cleardoublepage
+  \ucas@chapter*[]{#1}}{}
+\newcommand{\nomenclaturesection}[1]{%
+  \vspace{24bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{6bp}}
+\providecommand{\nomenclatureitem}[3][ ]{%
+    \noindent\makebox[0.15\textwidth][l]{#2}{{#3}\hfill{#1}}\par
 }
 \NewDocumentEnvironment{acknowledgement}{o}{%
     \cleardoublepage
@@ -893,7 +913,7 @@
 \newcommand{\resumeitem}[1]{%
   \vspace{24bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{6bp}}
 \newcommand{\researchitem}[1]{%
-  \vspace{32bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{14bp}}
+  \vspace{24bp}{\xiaosi\bfseries\flushleft{#1}}\par\vspace{6bp}}
 \newlist{publications}{enumerate}{1}
 \setlist[publications]{label=[\arabic*],align=left,nosep,itemsep=8bp,
   labelindent=0pt,leftmargin=10mm,labelsep=!,before=\xiaosi[1.26],resume}
@@ -901,12 +921,13 @@
 \setlist[achievements]{label=[\arabic*],align=left,nosep,itemsep=8bp,
   labelindent=0pt,leftmargin=10mm,labelsep=!,before=\xiaosi[1.26]}
 \def\publicationskip{\bigskip\bigskip}
-\newcommand\ucas@atendpackage{\csname ctex_at_end_package:nn\endcsname}
-\ucas@atendpackage{nomencl}{
-  \let\nomname\ucas@denotation@name
-  \def\thenomenclature{\begin{denotation}[\nom@tempdim]}
-  \def\endthenomenclature{\end{denotation}}
-}
+% TODO: not tested
+% \newcommand\ucas@atendpackage{\csname ctex_at_end_package:nn\endcsname}
+% \ucas@atendpackage{nomencl}{
+%   \let\nomname\ucas@denotation@name
+%   \def\thenomenclature{\begin{denotation}[\nom@tempdim]}
+%   \def\endthenomenclature{\end{denotation}}
+% }
 \ifucas@mkshuji
   \newCJKfontfamily[notosf]\notosf{Noto Sans CJK SC}
   \NewDocumentCommand{\ucas@shuji}%

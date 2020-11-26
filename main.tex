@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2019-11-29 10:16
+%% Last modified: 2020-11-26 01:44
 %%================================================
 \documentclass{ucasthesis}
 % \documentclass[degree=doctor,
@@ -50,7 +50,9 @@
 %% 符号对照表
 % 规范未限定放置顺序，但研究生部要求放文后
 % 鉴于各研究院所要求不同，可以试着放前面，页眉页脚会自动调整
-% \input{data/denotation}
+% update: use new enviroment *nomenclature* instead
+%         the environment *denotation* still available for compatibility
+\input{data/nomenclature}
 
 %%% 正文部分
 \mainmatter
@@ -78,7 +80,7 @@
 \end{appendix}
 
 %% 符号对照表
-\input{data/denotation}
+% \input{data/nomenclature}
 
 %% 致谢
 \include{data/ack}
