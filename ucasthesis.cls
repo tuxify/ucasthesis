@@ -3,7 +3,7 @@
 %% Encoding: UTF-8
 %% Author: Yuan Xiaoshuai - yxshuai@gmail.com
 %% Created: 2017-05-25 10:18
-%% Last modified: 2020-11-26 01:41
+%% Last modified: 2020-11-30 08:41
 %%================================================
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ucasthesis}
@@ -45,7 +45,7 @@
 \newif\ifucas@numbers
 \ucas@validate@key{bibstyle}
 \PassOptionsToPackage{quiet}{xeCJK}
-\LoadClass[a4paper,openany,UTF8,zihao=-4,scheme=plain,sub4section]{ctexbook}
+\LoadClass[a4paper,UTF8,zihao=-4,scheme=plain,sub4section]{ctexbook}
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \RequirePackage{amsmath}
@@ -493,7 +493,7 @@
 }%bi-second
 \captionsetup{labelformat=ucas,labelsep=ucas,format=ucas}
 \captionsetup[table]{position=top,belowskip=6bp,aboveskip=6bp}
-\captionsetup[figure]{position=bottom,belowskip=12bp,aboveskip=6bp}
+\captionsetup[figure]{position=bottom,belowskip=6bp,aboveskip=6bp}
 \captionsetup{bi-slc=off}
 \captionsetup[bi-first]{bi-first}
 \captionsetup[bi-second]{bi-second}
@@ -522,6 +522,7 @@
   chapter={
     afterindent=true,
     pagestyle={ucas@headings},
+    break=\cleardoublepage,
     beforeskip={9bp},
     aftername=\hskip\ccwd,
     afterskip={18bp},
